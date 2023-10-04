@@ -3,7 +3,7 @@
 distributes an archive to your web servers, using the function do_deploy.
 """
 from fabric.api import run, put, env
-from os.path import exists
+from os.path import isfile
 
 
 env.hosts = ['100.26.166.229', '34.202.157.96']
@@ -12,7 +12,7 @@ env.user = 'ubuntu'
 
 def do_deploy(archive_path):
     """distributes an archive to your web servers"""
-    if not exists(archive_path):
+    if not isfile(archive_path):
         return False
     archive = archive_path.split('/')[-1]
     path = "/data/web_static/releases/{}".format(archive.split('.')[0])
