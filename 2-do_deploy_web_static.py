@@ -14,10 +14,10 @@ def do_deploy(archive_path):
     """distributes an archive to your web servers"""
     if not isfile(archive_path):
         return False
-    archive = archive_path.split('/')[-1]
-    path = "/data/web_static/releases/{}".format(archive.split('.')[0])
-    tmp = "/tmp/{}".format(archive)
     try:
+        archive = archive_path.split('/')[-1]
+        path = "/data/web_static/releases/{}".format(archive.split('.')[0])
+        tmp = "/tmp/{}".format(archive)
         put(archive_path, '/tmp/')
         run("mkdir -p {}".format(path))
         run("tar -xzf {} -C {}/".format(tmp, path))
