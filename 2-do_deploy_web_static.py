@@ -8,7 +8,6 @@ from os.path import exists
 
 
 env.hosts = ['100.26.166.229', '34.202.157.96']
-env.user = 'ubuntu'
 
 
 def do_deploy(archive_path):
