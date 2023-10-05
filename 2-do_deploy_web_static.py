@@ -1,39 +1,31 @@
 #!/usr/bin/python3
-
 """
-Fabric script (based on the file 1-pack_web_static.py) that distributes an
-archive to your web servers, using the function do_deploy
-
-Author: Bradley Dillion Gilden
-Date: 04-10-2023
+distributes an archive to your web servers, using the function do_deploy.
 """
-from fabric.api import env, run, put
-from os import path
+from fabric.api import run, put, env
+from os.path import isfile
 
 
 env.hosts = ['100.26.166.229', '34.202.157.96']
+env.user = 'ubuntu'
 
 
 def do_deploy(archive_path):
-    """deploys archived static content to server"""
+    """distributes an archive to your web servers"""
+    if not isfile(archive_path):
+        return False
     try:
-        if not path.exists(archive_path):
-            return False
-
-        file = archive_path.split('/')[-1]
-        name = file.split('.')[0]
-        release_dir = f'/data/web_static/releases/{name}'
-        current_dir = '/data/web_static/current'
-
+        archive = archive_path.split('/')[-1]
+        path = "/data/web_static/releases/{}".format(archive.split('.')[0])
+        tmp = "/tmp/{}".format(archive)
         put(archive_path, '/tmp/')
-        run(f'mkdir -p {release_dir}')
-        run(f'tar -xzf /tmp/{file} -C {release_dir}')
-        run(f'rm /tmp/{file}')
-        run(f'mv {release_dir}/web_static/* {release_dir}/')
-        run(f'rm -rf {release_dir}/web_static')
-        run(f'rm -rf {current_dir}')
-        run(f'ln -s {release_dir} {current_dir}')
+        run("mkdir -p {}".format(path))
+        run("tar -xzf {} -C {}/".format(tmp, path))
+        run("rm {}".format(tmp))
+        run("mv {}/web_static/* {}/".format(path, path))
+        run("rm -rf {}/web_static".format(path))
+        run("rm -rf /data/web_static/current")
+        run("ln -s {}/ /data/web_static/current".format(path))
+        return True
     except Exception:
         return False
-
-    return True
