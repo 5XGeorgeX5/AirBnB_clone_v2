@@ -1,52 +1,31 @@
 #!/usr/bin/python3
 """
-Distributes an archive to my web servers,
-using the function do_deploy
+distributes an archive to your web servers, using the function do_deploy.
 """
-from fabric.api import *
-from datetime import datetime
-import os
+from fabric.api import run, put, env
+from os.path import isfile
+
 
 env.hosts = ['100.26.166.229', '34.202.157.96']
 env.user = 'ubuntu'
 
 
-def do_pack():
-    '''
-    Generates a tgz archive from the
-    contents of the web_static folder
-    '''
-    try:
-        local('mkdir -p versions')
-        datetime_format = '%Y%m%d%H%M%S'
-        archive_path = 'versions/web_static_{}.tgz'.format(
-            datetime.now().strftime(datetime_format))
-        local('tar -cvzf {} web_static'.format(archive_path))
-        print('web_static packed: {} -> {}'.format(archive_path,
-              os.path.getsize(archive_path)))
-    except:
-        return None
-
-
 def do_deploy(archive_path):
-    '''
-    Deploy archive to web server
-    '''
-    if not os.path.exists(archive_path):
+    """distributes an archive to your web servers"""
+    if not isfile(archive_path):
         return False
-    file_name = archive_path.split('/')[1]
-    file_path = '/data/web_static/releases/'
-    releases_path = file_path + file_name[:-4]
     try:
+        archive = archive_path.split('/')[-1]
+        path = "/data/web_static/releases/{}".format(archive.split('.')[0])
+        tmp = "/tmp/{}".format(archive)
         put(archive_path, '/tmp/')
-        run('mkdir -p {}'.format(releases_path))
-        run('tar -xzf /tmp/{} -C {}'.format(file_name, releases_path))
-        run('rm /tmp/{}'.format(file_name))
-        run('mv {}/web_static/* {}/'.format(releases_path, releases_path))
-        run('rm -rf {}/web_static'.format(releases_path))
-        run('rm -rf /data/web_static/current')
-        run('ln -s {} /data/web_static/current'.format(releases_path))
-        print('New version deployed!')
+        run("mkdir -p {}".format(path))
+        run("tar -xzf {} -C {}/".format(tmp, path))
+        run("rm {}".format(tmp))
+        run("mv {}/web_static/* {}/".format(path, path))
+        run("rm -rf {}/web_static".format(path))
+        run("rm -rf /data/web_static/current")
+        run("ln -s {}/ /data/web_static/current".format(path))
         return True
-    except:
+    except Exception:
         return False
