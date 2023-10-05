@@ -19,13 +19,13 @@ def do_deploy(archive_path):
         path = "/data/web_static/releases/{}".format(archive.split('.')[0])
         tmp = "/tmp/{}".format(archive)
         put(archive_path, '/tmp/')
-        run("mkdir -p {}".format(path))
-        run("tar -xzf {} -C {}/".format(tmp, path))
-        run("rm {}".format(tmp))
-        run("mv {}/web_static/* {}/".format(path, path))
-        run("rm -rf {}/web_static".format(path))
-        run("rm -rf /data/web_static/current")
-        run("ln -s {}/ /data/web_static/current".format(path))
+        run("sudo mkdir -p {}".format(path))
+        run("sudo tar -xzf {} -C {}/".format(tmp, path))
+        run("sudo rm {}".format(tmp))
+        run("suod mv {}/web_static/* {}/".format(path, path))
+        run("sudo rm -rf {}/web_static".format(path))
+        run("sudo rm -rf /data/web_static/current")
+        run("sudo ln -s {}/ /data/web_static/current".format(path))
         return True
     except Exception:
         return False
