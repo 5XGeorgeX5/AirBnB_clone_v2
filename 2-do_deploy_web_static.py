@@ -22,7 +22,7 @@ def do_deploy(archive_path):
         run("sudo mkdir -p {}".format(path))
         run("sudo tar -xzf {} -C {}/".format(tmp, path))
         run("sudo rm {}".format(tmp))
-        run("suod mv {}/web_static/* {}/".format(path, path))
+        run("sudo mv {}/web_static/* {}/".format(path, path))
         run("sudo rm -rf {}/web_static".format(path))
         run("sudo rm -rf /data/web_static/current")
         run("sudo ln -s {}/ /data/web_static/current".format(path))
