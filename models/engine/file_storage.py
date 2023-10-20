@@ -63,3 +63,7 @@ class FileStorage:
         """
         if obj in self.all().values():
             del self.all()[f'{type(obj).__name__}.{obj.id}']
+
+    def close(self):
+        """call reload() method"""
+        self.reload()
