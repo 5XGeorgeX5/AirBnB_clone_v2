@@ -23,12 +23,12 @@
 }
 
 .places article > h2 {
-  margin: 0 100px;
-  text-align: center;
+  margin: 10px 100px 0px 10px;
   justify-content: center;
   display: flex;
   font-size: 30px;
   padding-bottom: 60px;
+  word-wrap: anywhere;
 }
 
 .places .price_by_night {
