@@ -30,6 +30,7 @@
 .filters .amenities {
   height: 100%;
   width: 25%;
+  position: relative;
 }
 .locations {
   border-right: 1px solid #dddddd;
@@ -59,6 +60,11 @@
   transition: visibility 0s, opacity 0.25s linear;
   max-height: 300px;
   overflow: auto;
+  margin: 0;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
 }
 
 .locations .popover {
