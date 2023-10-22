@@ -46,7 +46,7 @@
       </section>
       <section class="places">
         <h1>Places</h1>
-        {% for owner in users|sort(attribute='name') %}
+        {% for owner in users %}
         {% for place in owner.places|sort(attribute='name') %}
         <article>
           <h2>{{ place.name }}</h2>
